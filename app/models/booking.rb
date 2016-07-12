@@ -1,6 +1,7 @@
 class Booking 
 
   BOOKING_URL = "/api/3.0/booking/"
+  ITEM_URL = "/api/3.0/item/"
 
   def self.all
     url = ENV['HOST'] + BOOKING_URL
@@ -51,6 +52,23 @@ class Booking
     
     return {bookings: bookings_by_courier, items: items_by_courier}
 
+  end
+
+  def self.by_booking_and_item booking_id, item_id
+    bookings_hash = Booking.by_id booking_id    
+
+    bookings = []
+    items = []
+
+    bookings_hash["items"].each do |key, item|
+      if item["id"].eql? item_id
+        bookings.push(bookings_hash.except("meta").except("items"))
+        items.push(item)
+      end
+    end
+    
+    return {bookings: bookings, items: items}
+    
   end
 
 end

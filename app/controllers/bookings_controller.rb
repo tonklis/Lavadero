@@ -13,4 +13,15 @@ class BookingsController < ApplicationController
     end
   end
 
+  #POST /bookings/in_the_future_by_courier
+  def by_booking_and_item
+    begin
+      bookings = Booking.by_booking_and_item params[:booking_id], params[:item_id]
+      render json: BookingSerializer.serialize(bookings)
+    rescue Exception => e
+      errors = {:error_retrieving_bookings => [e.message]}
+      render json: ErrorSerializer.serialize(errors), status: 500
+    end
+  end
+
 end
