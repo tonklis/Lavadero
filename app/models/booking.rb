@@ -17,6 +17,11 @@ class Booking
   def self.by_id id
     url = ENV['HOST'] + BOOKING_URL + id.to_s
     @booking = (Connection.get_json_response url)["booking"]
+    if not @booking
+      return []
+    else
+      return @booking
+    end
   end
 
   def self.in_the_future
