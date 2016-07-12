@@ -2,6 +2,12 @@ class Booking
 
   BOOKING_URL = "/api/3.0/booking/"
   ITEM_URL = "/api/3.0/item/"
+  CATEGORY_URL = "/api/3.0/category/"
+
+  def self.item_by_id id
+    url = ENV['HOST'] + ITEM_URL + id.to_s
+    @item = (Connection.get_json_response url)["item"]
+  end
 
   def self.all
     url = ENV['HOST'] + BOOKING_URL
@@ -68,6 +74,9 @@ class Booking
     bookings_hash["items"].each do |key, item|
       if item["id"].eql? item_id
         bookings.push(bookings_hash.except("meta").except("items"))
+        
+        q_item = Booking.item_by_id item_id
+        item["category"] = q_item["category"]
         items.push(item)
       end
     end
