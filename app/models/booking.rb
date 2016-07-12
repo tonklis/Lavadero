@@ -18,6 +18,11 @@ class Booking
     end_date = {end_date: ">#{Time.zone.now.beginning_of_day.to_i}"}
     #end_date = {end_date: "<#{Time.zone.now.to_i}"}
     @bookings = (Connection.post_json_response url, end_date)["booking/index"]
+    if @bookings.empty?
+      return []
+    else
+      return @bookings
+    end
   end
 
   def self.in_the_future_by_courier name
