@@ -13,7 +13,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  #POST /bookings/in_the_future_by_courier
+  #POST /bookings/by_booking_and_item
   def by_booking_and_item
     begin
       bookings = Booking.by_booking_and_item params[:booking_id], params[:item_id]
