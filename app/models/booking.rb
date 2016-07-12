@@ -14,7 +14,7 @@ class Booking
 
   def self.in_the_future
     url = ENV['HOST'] + BOOKING_URL 
-    end_date = {end_date: ">#{Time.zone.now.to_i}"}
+    end_date = {end_date: ">#{Time.zone.now.beginning_of_day.to_i}"}
     #end_date = {end_date: "<#{Time.zone.now.to_i}"}
     @bookings = (Connection.post_json_response url, end_date)["booking/index"]
   end
