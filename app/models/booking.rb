@@ -18,7 +18,7 @@ class Booking
     end_date = {end_date: ">#{Time.zone.now.beginning_of_day.to_i}"}
     #end_date = {end_date: "<#{Time.zone.now.to_i}"}
     @bookings = (Connection.post_json_response url, end_date)["booking/index"]
-    if @bookings.empty?
+    if not @bookings
       return []
     else
       return @bookings
