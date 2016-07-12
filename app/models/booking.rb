@@ -17,11 +17,6 @@ class Booking
   def self.by_id id
     url = ENV['HOST'] + BOOKING_URL + id.to_s
     @booking = (Connection.get_json_response url)["booking"]
-    if not @booking
-      return []
-    else
-      return @booking
-    end
   end
 
   def self.in_the_future
@@ -71,18 +66,20 @@ class Booking
   end
 
   def self.by_booking_and_item booking_id, item_id
-    bookings_hash = Booking.by_id booking_id    
+    bookings_hash = Booking.by_id booking_id   
 
     bookings = []
     items = []
 
-    bookings_hash["items"].each do |key, item|
-      if item["id"].eql? item_id
-        bookings.push(bookings_hash.except("meta").except("items"))
-        
-        q_item = Booking.item_by_id item_id
-        item["category"] = q_item["category"]
-        items.push(item)
+    if bookings_hash
+      bookings_hash["items"].each do |key, item|
+        if item["id"].eql? item_id
+          bookings.push(bookings_hash.except("meta").except("items"))
+          
+          q_item = Booking.item_by_id item_id
+          item["category"] = q_item["category"]
+          items.push(item)
+        end
       end
     end
     
