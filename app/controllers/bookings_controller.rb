@@ -16,7 +16,7 @@ class BookingsController < ApplicationController
   #POST /bookings/by_booking_and_item
   def by_booking_and_item
     begin
-      bookings = Booking.by_booking_and_item params[:booking_id], params[:item_id]
+      bookings = Booking.by_booking_and_item params[:booking_id].to_i, params[:item_id].to_i
       render json: BookingSerializer.serialize(bookings)
     rescue Exception => e
       errors = {:error_retrieving_bookings => [e.message]}
