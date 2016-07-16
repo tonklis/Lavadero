@@ -1,4 +1,4 @@
-class BookingsController < ApplicationController
+class BookingsController < ApiController
 
   #before_action :authenticate_user!, only: [:in_the_future_by_courier]
 

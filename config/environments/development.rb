@@ -1,7 +1,7 @@
 Rails.application.configure do
 
-  ENV['CHECKFRONT_CLIENT_KEY'] = 'b55cf51805b6db592f5bddd204322992b39ce11a'
-  ENV['CHECKFRONT_CLIENT_SECRET'] = '80e0cf1e9c33567b76882333ce4da055c34e76c2da218511a20936aa7055bc66'
+  ENV['CHECKFRONT_CLIENT_KEY'] = '8d66f1c57ddc3547fdc84760f832333bef34cbe2'
+  ENV['CHECKFRONT_CLIENT_SECRET'] = 'c119f413b4385d1b37479561d22edbac5f4538784373cb617ee444a46f9f4660'
   ENV['HOST'] = "https://coderia.checkfront.com"
 
   # Settings specified here will take precedence over those in config/application.rb.

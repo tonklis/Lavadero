@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'cancancan'
-#gem 'devise'
 gem 'devise',      '> 4.x'
 gem 'devise_token_auth'
 gem 'rack-cors', :require => 'rack/cors'
