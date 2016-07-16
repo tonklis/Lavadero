@@ -1,11 +1,11 @@
 class BookingsController < ApiController
 
-  #before_action :authenticate_user!, only: [:in_the_future_by_courier]
+  before_action :authenticate_user!
 
   #POST /bookings/in_the_future_by_courier
   def in_the_future_by_courier
     begin
-      bookings = Booking.in_the_future_by_courier params[:name]
+      bookings = Booking.in_the_future_by_courier current_user.name
       render json: BookingSerializer.serialize(bookings)
     rescue Exception => e
       errors = {:error_retrieving_bookings => [e.message]}
