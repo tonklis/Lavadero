@@ -1,8 +1,9 @@
-class Booking 
+class Booking  
 
   BOOKING_URL = "/api/3.0/booking/"
   ITEM_URL = "/api/3.0/item/"
   CATEGORY_URL = "/api/3.0/category/"
+  BOOKING_UPDATE_URL = "/api/3.0/booking/[id]/update"
 
   def self.item_by_id id
     url = ENV['HOST'] + ITEM_URL + id.to_s
@@ -29,6 +30,18 @@ class Booking
     else
       return @bookings
     end
+  end
+
+  def self.change_status booking_id, old_status_id, new_status_id
+
+    Booking.validate_status old_status_id, new_status_id
+    
+    url = ENV['HOST'] + BOOKING_UPDATE_URL
+    url.sub!("[id]", booking_id.to_s)
+    status = {status_id: new_status_id}
+
+    Connection.post_json_response url, status
+    return {bookings: [(Booking.by_id booking_id)]}
   end
 
   def self.in_the_future_by_courier name
@@ -85,6 +98,37 @@ class Booking
     
     return {bookings: bookings, items: items}
     
+  end
+ 
+  def self.validate_status old_status_id, new_status_id
+
+    case old_status_id
+    when "HOLD"
+      if not new_status_id.eql? "RECOL"
+        raise "Transición inválida de #{old_status_id} a #{new_status_id}."
+      end
+    when "ASIGN"
+      if not (new_status_id.eql? "RECOL" or new_status_id.eql? "CAMIN")
+        raise "Transición inválida de #{old_status_id} a #{new_status_id}."
+      end
+    when "CO12", "EFECT", "ENTRE", "PAID", "QUEJA", "FALTA", "REPRO", "PART"
+      if not new_status_id.eql? "CAMIN"
+        raise "Transición inválida de #{old_status_id} a #{new_status_id}."
+      end
+    when "RECOL"
+      if not (new_status_id.eql? "ENPRO" or new_status_id.eql? "PROBL")
+        raise "Transición inválida de #{old_status_id} a #{new_status_id}."
+      end      
+    when "CAMIN"
+      if not (new_status_id.eql? "DONE1" or new_status_id.eql? "PROBL")
+        raise "Transición inválida de #{old_status_id} a #{new_status_id}."
+      end 
+    else
+      raise "Estatus inicial no registrado."
+    end
+
+    return true
+
   end
 
 end
