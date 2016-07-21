@@ -35,9 +35,15 @@ class BookingsController < ApiController
     end
   end
 
-  #POST /bookings/add_note
-  def add_note
-
+  #POST /bookings/change_param
+  def change_param 
+    begin
+      booking = Booking.change_param params[:booking_id].to_i, params[:name], params[:value]
+      render json: BookingSerializer.serialize(booking)
+    rescue Exception => e
+      errors = {:error_retrieving_bookings => [e.message]}
+      render json: ErrorSerializer.serialize(errors), status: 500
+    end
   end
 
 end

@@ -32,6 +32,17 @@ class Booking
     end
   end
 
+  def self.change_param booking_id, name, value
+
+    url = ENV['HOST'] + BOOKING_UPDATE_URL
+    url.sub!("[id]", booking_id.to_s)
+    update_param = {name => value}
+
+    Connection.post_json_response url, update_param
+    return {bookings: [(Booking.by_id booking_id)]}
+
+  end
+
   def self.change_status booking_id, old_status_id, new_status_id
 
     Booking.validate_status old_status_id, new_status_id
