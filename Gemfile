@@ -13,6 +13,8 @@ gem 'draper',     github: 'audionerd/draper', branch: 'rails5', ref: 'e816e0e587
 gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
 gem 'active_model_serializers'
 
+gem 'newrelic_rpm'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
 # Use Puma as the app server
