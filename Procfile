@@ -1,1 +1,1 @@
-worker: bundle exec clockwork scripts/finish_and_pay_appointments.rb
+worker: bundle exec clockwork app/jobs/update_bookings.rb
