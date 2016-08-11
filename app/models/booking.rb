@@ -1,71 +1,40 @@
 class Booking  
-
-  BOOKING_URL = "/api/3.0/booking/"
-  ITEM_URL = "/api/3.0/item/"
-  CATEGORY_URL = "/api/3.0/category/"
-  BOOKING_UPDATE_URL = "/api/3.0/booking/[id]/update"
-
-  def self.item_by_id id
-    url = ENV['HOST'] + ITEM_URL + id.to_s
-    @item = (Connection.get_json_response url)["item"]
-  end
-
-  def self.all
-    url = ENV['HOST'] + BOOKING_URL
-    @bookings = Connection.get_json_response url
-  end
-
-  def self.by_id id
-    url = ENV['HOST'] + BOOKING_URL + id.to_s
-    @booking = (Connection.get_json_response url)["booking"]
-  end
-
-  def self.in_the_future
-    url = ENV['HOST'] + BOOKING_URL 
-    end_date = {end_date: ">#{Time.zone.now.beginning_of_day.to_i}"}
-    #end_date = {end_date: "<#{Time.zone.now.to_i}"}
-    @bookings = (Connection.post_json_response url, end_date)["booking/index"]
-    if not @bookings
-      return []
-    else
-      return @bookings
-    end
-  end
-
+   
+  #TODO: ADD ERROR HANDLING
+  
   def self.change_param booking_id, name, value
 
-    url = ENV['HOST'] + BOOKING_UPDATE_URL
-    url.sub!("[id]", booking_id.to_s)
-    update_param = {name => value}
-
-    Connection.post_json_response url, update_param
-    return {bookings: [(Booking.by_id booking_id)]}
-
+    #change in checkfront
+    @booking = CheckfrontDatum.booking_change_param booking_id, name, value
+      
+    # change locally
+    CheckfrontDatum.update_booking @booking
+      
+    return {bookings: [@booking]}
+      
   end
 
   def self.change_status booking_id, old_status_id, new_status_id
 
-    Booking.validate_status old_status_id, new_status_id
+    self.validate_status old_status_id, new_status_id
+  
+    #change in checkfront      
+    @booking = CheckfrontDatum.booking_change_param booking_id, "status_id", new_status_id
+      
+    # change locally
+    CheckfrontDatum.update_booking @booking
+      
+    return {bookings: [@booking]}
     
-    url = ENV['HOST'] + BOOKING_UPDATE_URL
-    url.sub!("[id]", booking_id.to_s)
-    status = {status_id: new_status_id}
-
-    Connection.post_json_response url, status
-    return {bookings: [(Booking.by_id booking_id)]}
   end
 
   def self.in_the_future_by_courier name
-    bookings_hash = Booking.in_the_future
-    booking_ids = []
-    bookings_hash.each do |key, bookings|
-      booking_ids.push(bookings["booking_id"])
-    end
 
-    bookings = []
-    booking_ids.each do |booking_id|
-      bookings.push(Booking.by_id booking_id)
+    if not CheckfrontDatum.instance.bookings
+      CheckfrontDatum.get_and_save_latest_bookings
     end
+      
+    bookings = eval(CheckfrontDatum.instance.bookings) 
 
     items_by_courier = []
     bookings_by_courier = []
@@ -90,7 +59,7 @@ class Booking
   end
 
   def self.by_booking_and_item booking_id, item_id
-    bookings_hash = Booking.by_id booking_id   
+    bookings_hash = CheckfrontDatum.get_booking_by_id booking_id   
 
     bookings = []
     items = []
@@ -100,7 +69,7 @@ class Booking
         if item["id"].eql? item_id
           bookings.push(bookings_hash.except("meta").except("items"))
           
-          q_item = Booking.item_by_id item_id
+          q_item = CheckfrontDatum.get_item_by_id item_id
           item["category"] = q_item["category"]
           items.push(item)
         end

@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :checkfront_data do
+    collection do
+      get 'update_bookings', :to => 'checkfront_data#update_bookings'
+    end
+  end
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   

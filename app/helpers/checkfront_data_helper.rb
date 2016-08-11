@@ -1,0 +1,2 @@
+module CheckfrontDataHelper
+end
