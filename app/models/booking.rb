@@ -44,7 +44,9 @@ class Booking
 
         params.each do |courier_name, value|
           if name.downcase.eql? courier_name.downcase
-            bookings_by_courier.push(booking.except("meta").except("items"))
+            if bookings_by_courier.select{ |x| x["id"] == booking["id"] }.empty?
+              bookings_by_courier.push(booking.except("meta").except("items"))
+            end
             item["booking_uid"] = booking["id"]
             item["booking_id"] = booking["booking_id"]
             items_by_courier.push(item)
