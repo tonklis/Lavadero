@@ -19,7 +19,7 @@ class Booking
     self.validate_status old_status_id, new_status_id
   
     #change in checkfront      
-    @booking = CheckfrontDatum.booking_change_param booking_id, "status_id", new_status_id
+    @booking = CheckfrontDatum.booking_change_status booking_id, new_status_id
       
     # change locally
     CheckfrontDatum.update_booking @booking
@@ -28,7 +28,7 @@ class Booking
     
   end
 
-  def self.in_the_future_by_courier name
+  def self.in_the_future_by_courier name, admin = false
 
     if not CheckfrontDatum.instance.bookings
       CheckfrontDatum.get_and_save_latest_bookings
@@ -43,9 +43,9 @@ class Booking
         params = item["param"]
 
         params.each do |courier_name, value|
-          if name.downcase.eql? courier_name.downcase
+          if admin or name.downcase.eql? courier_name.downcase
             #if bookings_by_courier.select{ |x| x["id"] == booking["id"] }.empty?
-              bookings_by_courier.push(booking.except("meta").except("items"))
+            bookings_by_courier.push(booking.except("meta").except("items"))
             #end
             item["booking_uid"] = booking["id"]
             item["booking_id"] = booking["booking_id"]

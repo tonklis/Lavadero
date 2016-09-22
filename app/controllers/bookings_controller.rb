@@ -5,7 +5,7 @@ class BookingsController < ApiController
   #POST /bookings/in_the_future_by_courier
   def in_the_future_by_courier
     begin
-      bookings = Booking.in_the_future_by_courier current_user.name
+      bookings = Booking.in_the_future_by_courier current_user.name, current_user.role? :admin
       render json: BookingSerializer.serialize(bookings)
     rescue Exception => e
       errors = {:error_retrieving_bookings => [e.message]}

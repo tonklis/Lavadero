@@ -82,11 +82,11 @@ class CheckfrontDatum < ApplicationRecord
 
   end
 
-  def self.booking_change_status booking_id, name, value
+  def self.booking_change_status booking_id, value
 
-  url = ENV['HOST'] + BOOKING_UPDATE_URL
+    url = ENV['HOST'] + BOOKING_UPDATE_URL
     url.sub!("[id]", booking_id.to_s)
-    status = {status_id: new_status_id}
+    status = {status_id: new_status_id, notify: 1}
 
     Connection.post_json_response url, status
     #TODO: change locally
