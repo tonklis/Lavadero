@@ -90,7 +90,7 @@ class Booking
         raise "Transición inválida de #{old_status_id} a #{new_status_id}."
       end
     when "ASIGN"
-      if not (new_status_id.eql? "RECOL" or new_status_id.eql? "CAMIN")
+      if not (new_status_id.eql? "RECOL" or new_status_id.eql? "CAMIN" or new_status_id.eql? "PROBL")
         raise "Transición inválida de #{old_status_id} a #{new_status_id}."
       end
     when "CO12", "EFECT", "ENTRE", "PAID", "QUEJA", "FALTA", "REPRO", "PART"
