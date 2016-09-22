@@ -89,8 +89,7 @@ class CheckfrontDatum < ApplicationRecord
     status = {status_id: value, notify: 1}
 
     Connection.post_json_response url, status
-    #TODO: change locally
-    return {bookings: [(Booking.by_id booking_id)]}
+    return self.get_booking_by_id booking_id
 
   end
 
