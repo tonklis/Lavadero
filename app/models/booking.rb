@@ -40,16 +40,25 @@ class Booking
     bookings_by_courier = []
     bookings.each do |booking|
       booking["items"].each do |key, item|
-        params = item["param"]
-
-        params.each do |courier_name, value|
-          if admin or name.downcase.eql? courier_name.downcase
-            #if bookings_by_courier.select{ |x| x["id"] == booking["id"] }.empty?
+        if admin
+          name = item["name"]
+          if name.include? "Recol"
             bookings_by_courier.push(booking.except("meta").except("items"))
-            #end
             item["booking_uid"] = booking["id"]
             item["booking_id"] = booking["booking_id"]
             items_by_courier.push(item)
+          end
+        else
+          params = item["param"]
+          params.each do |courier_name, value|
+            if name.downcase.eql? courier_name.downcase
+              #if bookings_by_courier.select{ |x| x["id"] == booking["id"] }.empty?
+              bookings_by_courier.push(booking.except("meta").except("items"))
+              #end
+              item["booking_uid"] = booking["id"]
+              item["booking_id"] = booking["booking_id"]
+              items_by_courier.push(item)
+            end
           end
         end
 
