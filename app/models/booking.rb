@@ -28,7 +28,10 @@ class Booking
     
   end
 
-  def self.in_the_future_by_courier name, admin = false
+  def self.in_the_future_by_courier name, roles 
+
+    dispatcher = !roles.select{|x| x.name == "dispatcher"}.empty?
+    hub = !roles.select{|x| x.name == "hub"}.empty?
 
     if not CheckfrontDatum.instance.bookings
       CheckfrontDatum.get_and_save_latest_bookings
@@ -40,7 +43,7 @@ class Booking
     bookings_by_courier = []
     bookings.each do |booking|
       booking["items"].each do |key, item|
-        if admin
+        if hub 
           name = item["name"]
           if name.include? "Recol"
             bookings_by_courier.push(booking.except("meta").except("items"))
@@ -51,7 +54,8 @@ class Booking
         else
           params = item["param"]
           params.each do |courier_name, value|
-            if name.downcase.eql? courier_name.downcase
+            # IF DISPATCHER ROLE OR SPECIFIED COURIER NAME
+            if (dispatcher and User.all.collect{|user| user.name}.index(courier_name.downcase) ) or (name.downcase.eql? courier_name.downcase)
               #if bookings_by_courier.select{ |x| x["id"] == booking["id"] }.empty?
               bookings_by_courier.push(booking.except("meta").except("items"))
               #end
