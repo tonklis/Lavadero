@@ -1,4 +1,9 @@
 Rails.application.configure do
+
+  ENV['CHECKFRONT_CLIENT_KEY'] = '8d66f1c57ddc3547fdc84760f832333bef34cbe2'
+  ENV['CHECKFRONT_CLIENT_SECRET'] = 'c119f413b4385d1b37479561d22edbac5f4538784373cb617ee444a46f9f4660'
+  ENV['HOST'] = "https://coderia.checkfront.com"
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's

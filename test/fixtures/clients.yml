@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  checkfront_id: MyString
+  email: MyString
+  name: MyString
+
+two:
+  checkfront_id: MyString
+  email: MyString
+  name: MyString

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922221818) do
+ActiveRecord::Schema.define(version: 20161117235148) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -31,12 +31,54 @@ ActiveRecord::Schema.define(version: 20160922221818) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "answers", force: :cascade do |t|
+    t.integer  "parent_question_id"
+    t.integer  "child_question_id"
+    t.text     "text"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "checkfront_data", force: :cascade do |t|
     t.text     "bookings"
     t.integer  "singleton_guard"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.index ["singleton_guard"], name: "index_checkfront_data_on_singleton_guard", unique: true
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string   "checkfront_id"
+    t.string   "email"
+    t.string   "name"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.integer  "answer_id"
+    t.integer  "order_id"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["answer_id"], name: "index_feedbacks_on_answer_id"
+    t.index ["order_id"], name: "index_feedbacks_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string   "checkfront_id"
+    t.integer  "client_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.text     "text"
+    t.string   "question_type"
+    t.boolean  "required"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "root",          default: false
   end
 
   create_table "roles", force: :cascade do |t|

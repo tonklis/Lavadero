@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  resources :feedbacks
+  resources :clients
+  resources :orders
+  resources :answers
+  resources :questions do
+    collection do
+      get 'tree', :to => 'questions#tree'
+    end
+  end
   resources :checkfront_data do
     collection do
       get 'update_bookings', :to => 'checkfront_data#update_bookings'
