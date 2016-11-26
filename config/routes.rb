@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
-  resources :feedbacks
+  resources :feedbacks do
+    collection do
+      post 'batch_create', :to => 'feedbacks#batch_create'
+    end
+  end
   resources :clients
   resources :orders
   resources :answers
