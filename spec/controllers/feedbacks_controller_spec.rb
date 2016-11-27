@@ -1,7 +1,5 @@
 feature 'FeedbacksController' do
 
-  let!(:order_01){create(:order)}
-  
   let!(:question_01){create(:question, question_type: "RATE", root: true)}
   let!(:question_02){create(:question, question_type: "SINGLE")}
   let!(:question_03){create(:question, question_type: "MULTIPLE")}
@@ -18,14 +16,17 @@ feature 'FeedbacksController' do
 
     it 'should create many feedback objects' do
       
-      feedbacks = [{order_id: order_01.id, answer_id: answer_01.id},
-                   {order_id: order_01.id, answer_id: answer_03.id},
-                   {order_id: order_01.id, answer_id: answer_05.id, description: "last in tree"}]
+      expect(Order.count).to be 0
+
+      feedbacks = [{order_checkfront_id: "ABCDEFG", answer_id: answer_01.id},
+                   {order_checkfront_id: "ABCDEFG", answer_id: answer_03.id},
+                   {order_checkfront_id: "ABCDEFG", answer_id: answer_05.id, description: "last in tree"}]
 
       with_rack_test_driver do
         page.driver.post batch_create_feedbacks_path, { feedbacks: feedbacks}
       end
       response = JSON.parse(page.body)
+      expect(Order.count).to be 1
       expect(response["feedbacks"].count).to be 3
       expect(response["feedbacks"][2]["description"]).to eql "last in tree"
 
