@@ -5,10 +5,10 @@ feature 'QuestionsController' do
   let!(:question_03){create(:question, question_type: "MULTIPLE")}
   let!(:question_04){create(:question, question_type: "MULTIPLE")}
 
-  let!(:answer_01){create(:answer, parent_question: question_01, child_question: question_02)}
+  let!(:answer_01){create(:answer, parent_question: question_01, child_questions: [question_02])}
   let!(:answer_02){create(:answer, parent_question: question_01)}
-  let!(:answer_03){create(:answer, parent_question: question_02, child_question: question_03)}
-  let!(:answer_04){create(:answer, parent_question: question_02, child_question: question_04)}
+  let!(:answer_03){create(:answer, parent_question: question_02, child_questions: [question_03])}
+  let!(:answer_04){create(:answer, parent_question: question_02, child_questions: [question_04])}
   let!(:answer_05){create(:answer, parent_question: question_03)}
   let!(:answer_06){create(:answer, parent_question: question_04)}
 
@@ -21,14 +21,14 @@ feature 'QuestionsController' do
 
       questions = response["questions"][0]
 
-      expect(questions["child_answers"][0]["child_question"]["id"]).to eql question_02.id
+      expect(questions["child_answers"][0]["child_questions"][0]["id"]).to eql question_02.id
       expect(questions["child_answers"][1]["id"]).to eql answer_02.id
 
-      expect(questions["child_answers"][0]["child_question"]["child_answers"][0]["id"]).to eql answer_03.id
-      expect(questions["child_answers"][0]["child_question"]["child_answers"][1]["id"]).to eql answer_04.id
+      expect(questions["child_answers"][0]["child_questions"][0]["child_answers"][0]["id"]).to eql answer_03.id
+      expect(questions["child_answers"][0]["child_questions"][0]["child_answers"][1]["id"]).to eql answer_04.id
       
-      expect(questions["child_answers"][0]["child_question"]["child_answers"][0]["child_question"]["child_answers"][0]["id"]).to be answer_05.id
-      expect(questions["child_answers"][0]["child_question"]["child_answers"][0]["child_question"]["child_answers"][0]["child_question"]["id"]).to be nil 
+      expect(questions["child_answers"][0]["child_questions"][0]["child_answers"][0]["child_questions"][0]["child_answers"][0]["id"]).to be answer_05.id
+      expect(questions["child_answers"][0]["child_questions"][0]["child_answers"][0]["child_questions"][0]["child_answers"][0]["child_questions"]).to eql []
     end
 
   end

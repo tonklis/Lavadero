@@ -5,10 +5,10 @@ feature 'FeedbacksController' do
   let!(:question_03){create(:question, question_type: "MULTIPLE")}
   let!(:question_04){create(:question, question_type: "MULTIPLE")}
 
-  let!(:answer_01){create(:answer, parent_question: question_01, child_question: question_02)}
+  let!(:answer_01){create(:answer, parent_question: question_01, child_questions: [question_02])}
   let!(:answer_02){create(:answer, parent_question: question_01)}
-  let!(:answer_03){create(:answer, parent_question: question_02, child_question: question_03)}
-  let!(:answer_04){create(:answer, parent_question: question_02, child_question: question_04)}
+  let!(:answer_03){create(:answer, parent_question: question_02, child_questions: [question_03])}
+  let!(:answer_04){create(:answer, parent_question: question_02, child_questions: [question_04])}
   let!(:answer_05){create(:answer, parent_question: question_03)}
   let!(:answer_06){create(:answer, parent_question: question_04)}
 

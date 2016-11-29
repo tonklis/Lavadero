@@ -15,15 +15,15 @@ q3 = Question.create!(text: "¿Qué problema hubo con tu ropa?", question_type: 
 q4 = Question.create!(text: "¿Cuál problema hubo con la puntualidad?", question_type: "MULTIPLE", required: true)
 q5 = Question.create!(text: "Dinos si tuviste alguno de los siguientes problemas:", question_type: "MULTIPLE", required: true)
 
-a1_1 = Answer.create!(text: "1", parent_question: q1, child_question: q2)
-a1_2 = Answer.create!(text: "2", parent_question: q1, child_question: q2)
-a1_3 = Answer.create!(text: "3", parent_question: q1, child_question: q2)
+a1_1 = Answer.create!(text: "1", parent_question: q1, child_questions: [q2])
+a1_2 = Answer.create!(text: "2", parent_question: q1, child_questions: [q2])
+a1_3 = Answer.create!(text: "3", parent_question: q1, child_questions: [q2])
 a1_4 = Answer.create!(text: "4", parent_question: q1)
 a1_5 = Answer.create!(text: "5", parent_question: q1)
 
-a2_1 = Answer.create!(text: "Calidad de la ropa", parent_question: q2, child_question: q3)
-a2_2 = Answer.create!(text: "Puntualidad", parent_question: q2, child_question: q4)
-a2_3 = Answer.create!(text: "Otro", parent_question: q2, child_question: q5)
+a2_1 = Answer.create!(text: "Calidad de la ropa", parent_question: q2, child_questions: [q3])
+a2_2 = Answer.create!(text: "Puntualidad", parent_question: q2, child_questions: [q4])
+a2_3 = Answer.create!(text: "Otro", parent_question: q2, child_questions: [q5])
 
 a3_1 = Answer.create!(text: "Sucia", parent_question: q3)
 a3_2 = Answer.create!(text: "Encogida", parent_question: q3)
